@@ -1,0 +1,66 @@
+# Recuperação - Sistema de Eventos
+
+Sistema web (API) para cadastro de eventos, inscrições e controle de lotação.
+
+## Tema
+
+Eventos, inscrições e lotação (Team 5)
+
+## Requisitos
+
+- Python 3.10+
+- Flask
+
+## Instalação
+
+```bash
+pip install flask
+```
+
+## Execução
+
+```bash
+python app.py
+```
+
+## Endpoints
+
+### Eventos
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| POST | `/eventos` | Criar evento |
+| GET | `/eventos` | Listar eventos |
+| GET | `/eventos/{id}` | Obter evento |
+
+### Inscrições
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| POST | `/eventos/{id}/inscricoes` | Inscrever participante |
+| GET | `/eventos/{id}/inscricoes` | Listar inscrições |
+| GET | `/eventos/{id}/lotacao` | Verificar lotação |
+
+## Exemplos
+
+### Criar evento
+
+```bash
+curl -X POST http://localhost:5000/eventos \
+  -H "Content-Type: application/json" \
+  -d '{"nome": "Workshop Python", "data": "2026-06-20", "capacidade_maxima": 3, "descricao": "Workshop de Python"}'
+```
+
+### Inscrever participante
+
+```bash
+curl -X POST http://localhost:5000/eventos/1/inscricoes \
+  -H "Content-Type: application/json" \
+  -d '{"nome": "Luann", "email": "luann@email.com"}'
+```
+
+### Verificar lotação
+
+```bash
+curl http://localhost:5000/eventos/1/lotacao
+```
