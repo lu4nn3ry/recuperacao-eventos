@@ -1,7 +1,27 @@
+import hmac
+import os
+
 from flask import Flask, jsonify, request
 
 
 app = Flask(__name__)
+
+
+def _chave_admin_configurada():
+    return os.environ.get("ADMIN_API_KEY", "")
+
+
+def _admin_autorizado():
+    """Valida o header X-Admin-Key contra ADMIN_API_KEY (fail-closed).
+
+    Sem a variável de ambiente configurada, nenhuma requisição é autorizada.
+    A comparação usa hmac.compare_digest para evitar timing attacks.
+    """
+    chave_esperada = _chave_admin_configurada()
+    if not chave_esperada:
+        return False
+    chave_recebida = request.headers.get("X-Admin-Key", "")
+    return hmac.compare_digest(chave_recebida, chave_esperada)
 
 
 class Evento:
@@ -100,6 +120,8 @@ def inscrever_participante(id):
 
 @app.get("/eventos/<int:id>/inscricoes")
 def listar_inscricoes(id):
+    if not _admin_autorizado():
+        return jsonify({"erro": "Acesso restrito a administradores"}), 403
     evento = next((e for e in db_eventos if e.id == id), None)
     if not evento:
         return jsonify({"erro": "Evento nao encontrado"}), 404
