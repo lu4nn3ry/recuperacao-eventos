@@ -23,6 +23,11 @@ pip install flask
 python app.py
 ```
 
+> **Segurança:** para consultar `GET /eventos/{id}/inscricoes`, defina a
+> variável de ambiente `ADMIN_API_KEY` e envie o header `X-Admin-Key` com
+> o mesmo valor. Sem a variável configurada, o endpoint nega o acesso
+> (fail-closed).
+
 ## Endpoints
 
 ### Eventos
